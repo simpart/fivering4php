@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT License 
  */
-namespace error;
+namespace tetraring\error;
 require_once(__DIR__ . '/define.php');
 
 /**
@@ -13,9 +13,9 @@ require_once(__DIR__ . '/define.php');
  * @brief common error class
  */
 class CcomErr extends \Exception {
-    private $header   = "";
-    private $summary  = null;
-    private $contents = null;
+    private $header  = "";
+    private $summary = null;
+    private $conts   = null;
     
     /**
      * set error string
@@ -26,7 +26,7 @@ class CcomErr extends \Exception {
     function __construct($err, $cnt ) {
         try {
             $this->summary  = $err;
-            $this->contents = $cnt;
+            $this->conts    = $cnt;
         } catch( \Exception $e ) {
             DERR_EXCPCNT_METHOD;
         }
@@ -37,14 +37,13 @@ class CcomErr extends \Exception {
      */
     public function showConts() {
         try {
-            echo $this->err_hdr . 'Error   : ' . $this->err_conts . PHP_EOL;
-            $cnt  = strlen($this->err_hdr);
+            echo $this->header . 'Error   : ' . $this->summary . PHP_EOL;
             $pad  = "";
             $loop = 0;
-            for($loop=0;$loop < $cnt;$loop++) {
+            for($loop=0;$loop < strlen($this->header);$loop++) {
                 $pad .= ' ';
             }
-            echo 'Support '. $pad .': ' . $this->sup_str . PHP_EOL;
+            echo 'Support ' . $pad . ': ' . $this->conts . PHP_EOL;
         } catch ( \Exception $e ) {
             DERR_EXCPCNT_METHOD;
         }
@@ -52,7 +51,7 @@ class CcomErr extends \Exception {
     
     protected function setHeader($hdr) {
         try {
-            $this->err_hdr = $hdr;
+            $this->header = $hdr;
         } catch (\Exception $e) {
             DERR_EXCPCNT_METHOD;
         }
