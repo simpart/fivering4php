@@ -12,15 +12,15 @@ class Connector {
     /**
      * get pdo object
      */
-    public function __construct($host, $dbnm, $user, $pass) {
+    function __construct($host, $dbnm, $user, $pass) {
         try {
             $pdo = new \PDO(
                 'mysql:host=' . $host . ';dbname=' . $dbnm . ';charset=utf8',
                 $user ,
                 $pass ,
                 array(
-                    PDO::ATTR_EMULATE_PREPARES        => false,
-                    PDO::MYSQL_ATTR_READ_DEFAULT_FILE => '/etc/my.cnf'
+                    \PDO::ATTR_EMULATE_PREPARES        => false,
+                    \PDO::MYSQL_ATTR_READ_DEFAULT_FILE => '/etc/my.cnf'
                 )
             );
             if(true === is_null($pdo)) {
@@ -29,7 +29,14 @@ class Connector {
             $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
             $this->conn = $pdo;
         } catch (\Exception $e) {
-            DERR_EXCPCNT_METHOD;
+            throw new \Exception(
+                          PHP_EOL   .
+                          'File:'   . __FILE__         . ',' .
+                          'Line:'   . __line__         . ',' .
+                          'Class:'  . get_class($this) . ',' .
+                          'Method:' . __FUNCTION__     . ',' .
+                          $e->getMessage()
+                      );
         }
     }
     
@@ -51,12 +58,19 @@ class Connector {
             $stmt    = $this->conn->prepare($sql);
             $stmt->execute();
             $ret_val = null;
-            while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            while($row = $stmt->fetch(\PDO::FETCH_ASSOC)) {
                 $ret_val[] = $row;
             }
             return $ret_val;
         } catch (\Exception $e) {
-            DERR_EXCPCNT_METHOD;
+            throw new \Exception(
+                          PHP_EOL   .
+                          'File:'   . __FILE__         . ',' .
+                          'Line:'   . __line__         . ',' .
+                          'Class:'  . get_class($this) . ',' .
+                          'Method:' . __FUNCTION__     . ',' .
+                          $e->getMessage()
+                      );
         }
     }
 }

@@ -12,7 +12,7 @@
  * @attention Exception value name is '$e'
  */
 define(
-    "DERR_EXCPCNT_METHOD",
+    'DERR_EXCPCNT_METHOD',
     'throw new \Exception(
                    PHP_EOL   .
                    \'File:\'   . __FILE__         . \',\' .
