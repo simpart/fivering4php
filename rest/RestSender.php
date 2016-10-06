@@ -65,6 +65,7 @@ class RestSender
         try {
             $curl = curl_init($uri);
             curl_setopt($curl, CURLOPT_POST, true);
+            // application/x-www-form-urlencoded
             curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
             curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($prm));
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
