@@ -6,7 +6,6 @@
  * @note   MIT license
  */
 namespace tetraring\cls;
-require_once(__DIR__ . '/directory.php');
 $Gtrp_appPath = __DIR__ . '/../';
 
 /*** function ***/

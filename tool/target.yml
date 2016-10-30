@@ -1,0 +1,22 @@
+- filesys:
+    require: null
+    enable: true
+- class:
+    require:
+      - filesys
+    enable: true
+- rest:
+    require:
+      - class
+    enable: true
+- format:
+    require: null
+    enable: true
+- database:
+    require:
+      - class
+    enable: true
+- error:
+    require:
+      - class
+    enable: true
