@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\dir;
+namespace tetraring\filesys;
 
 /**
  * delete directory
