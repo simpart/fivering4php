@@ -1,9 +1,12 @@
-- filesys:
+- file:
+    require: null
+    enable: true
+- dir:
     require: null
     enable: true
 - class:
     require:
-      - filesys
+      - dir
     enable: true
 - rest:
     require:
