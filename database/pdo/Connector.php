@@ -4,7 +4,7 @@
  * @brief  connect to RDMS
  * @author simpart
  */
-namespace tetraring\database\pdo;
+namespace ttr\database\pdo;
 
 class Connector {
     private $conn = null;
