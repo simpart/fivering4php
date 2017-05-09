@@ -5,7 +5,9 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\dir;
+namespace ttr\dir;
+
+
 
 /**
  * delete directory
@@ -143,6 +145,26 @@ function copy($src, $dst) {
                 }
             }
         }
+    } catch (\Exception $e) {
+        throw $e;
+    }
+}
+
+function getFiles ($dir) {
+    try {
+        if(false === \ttr\dir\isExists($dir)) {
+            throw new \Exception($dir . ' is not exists');
+        }
+        $ret_val = null;
+        $odir = scandir( $dir );
+        foreach( $odir as $elm ) {
+            $fpath = $dir . DIRECTORY_SEPARATOR . $elm;
+            $ftype = filetype($fpath);
+            if (0 === strcmp($ftype, 'file')) {
+                $ret_val[] = $fpath;
+            }
+        }
+        return $ret_val;
     } catch (\Exception $e) {
         throw $e;
     }
