@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\rest;
+namespace ttr\rest;
 
 function resp($msg) {
     try {

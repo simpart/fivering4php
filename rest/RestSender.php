@@ -36,7 +36,7 @@ class RestSender
     }
     
     
-    public function sendGet ($prm)
+    public function sendGet ($opt)
     {
         try {
 #            $curl = null;
@@ -58,7 +58,28 @@ class RestSender
 #            $ret_val = curl_exec($curl);
 #            curl_close($curl);
 #
-#            return $ret_val;
+            $curl = curl_init($this->uri);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST , 'GET');
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+            curl_setopt($curl, CURLOPT_MAXREDIRS     , 5);
+
+            if (null !== $opt) {
+                foreach ($opt as $key => $val) {
+                    curl_setopt($curl, $key, $val);
+                }
+            }
+
+            $ret_val = curl_exec($curl);
+            if (false === $ret_val) {
+                 var_dump(curl_getinfo($curl));
+                 var_dump(curl_errno($curl));
+            }
+            curl_close($curl);
+            
+            return $ret_val;
         } catch (\Exception $e) {
             throw new \Exception(
                       PHP_EOL   .

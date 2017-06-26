@@ -38,7 +38,7 @@ class Scp
                 $this->port    = $val;
             } else if (0 === strcmp($key, 'username')) {
                 $this->usernm  = $val;
-            } else if (0 === strcmp($key, 'pasword')) {
+            } else if (0 === strcmp($key, 'password')) {
                 $this->passwd  = $val;
             } else if (0 === strcmp($key, 'pubkey')) {
                 $this->pubkey  = $val;
