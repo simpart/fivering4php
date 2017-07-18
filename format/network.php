@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\format\network;
+namespace ttr\format\network;
 require_once(__DIR__ . '/integer.php');
 /**
  * check ipaddress
@@ -67,7 +67,7 @@ function isHostName($host) {
         /* check integer */
         $chk = true;
         for($loop=0; $loop < $host_len ;$loop++) {
-            if (false === \tetraring\format\integer\isDecimal($host[$loop])) {
+            if (false === \ttr\format\integer\isDecimal($host[$loop])) {
                 $chk = false;
                 break;
             }

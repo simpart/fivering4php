@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\file;
+namespace ttr\file;
 
 /**
  * check exists file

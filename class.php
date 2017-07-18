@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\cls;
+namespace ttr\cls;
 $Gtrp_appPath = __DIR__ . '/../';
 
 /*** function ***/
@@ -53,7 +53,7 @@ function setAppPath($path) {
     try {
         global $Gtrp_appPath;
         
-        if (false === \tetraring\dir\isExists($path)) {
+        if (false === \ttr\dir\isExists($path)) {
             throw new \Exception('parameter is null');
         }
         $Gtrp_appPath = $path;
@@ -62,5 +62,5 @@ function setAppPath($path) {
     }
 }
 
-spl_autoload_register('\tetraring\cls\load');
+spl_autoload_register('\ttr\cls\load');
 /* end of file */

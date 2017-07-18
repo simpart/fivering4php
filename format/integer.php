@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT license
  */
-namespace tetraring\format\integer;
+namespace ttr\format\integer;
 
 
 

@@ -5,7 +5,7 @@
  * @author simpart
  * @note   MIT License 
  */
-namespace tetraring\error;
+namespace ttr\error;
 require_once(__DIR__ . '/define.php');
 
 /**
