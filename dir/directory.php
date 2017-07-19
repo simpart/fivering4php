@@ -102,6 +102,17 @@ function isExists($dir) {
     }
 }
 
+function isRelative ($path) {
+    try {
+        if (0 !== strpos($path, './')) {
+            return false;
+        }
+        return true;
+    } catch (\Exception $e) {
+        throw $e;
+    }
+}
+
 /**
  * copy directory
  * 
