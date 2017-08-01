@@ -7,3 +7,4 @@
     require_once(__DIR__.'/format/require.php');
     require_once(__DIR__.'/database/require.php');
     require_once(__DIR__.'/error/require.php');
+    require_once(__DIR__.'/session/require.php');
