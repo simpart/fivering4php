@@ -102,20 +102,33 @@ class RestSender
         try {
             $curl = curl_init($this->uri);
             curl_setopt($curl, CURLOPT_POST, true);
-            // application/json
-            curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
-            curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($prm));
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($curl, CURLOPT_MAXREDIRS     , 5);
             
+            $json = false;
             if (null !== $opt) {
                 foreach ($opt as $key => $val) {
+                    if ($key === CURLOPT_HTTPHEADER) {
+                        foreach ($val as $hdr_elm) {
+                            if ( (false !== strpos($hdr_elm, 'Content-Type:')) &&
+                                 (false !== strpos($hdr_elm, 'application/json')) ) {
+                                $json = true;
+                            }
+                        }
+                    }
                     curl_setopt($curl, $key, $val);
                 }
             } 
+            
+            if (true === $json) {
+                curl_setopt($curl, CURLOPT_POSTFIELDS, $prm);
+            } else {
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+                curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($prm));
+            }
             
             $ret_val = curl_exec($curl);
             if (false === $ret_val) {
