@@ -124,7 +124,7 @@ class RestSender
             } 
             
             if (true === $json) {
-                curl_setopt($curl, CURLOPT_POSTFIELDS, $prm);
+                curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($prm));
             } else {
                 curl_setopt($curl, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
                 curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($prm));
