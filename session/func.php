@@ -4,7 +4,7 @@ namespace ttr\ses;
 
 function init ($nm) {
     try {
-        if (0 === strcmp('string', gettype($nm))) {
+        if (0 !== strcmp('string', gettype($nm))) {
             throw new \Exception('invalid parameter : ' . __FILE__ . '->' . __LINE__ );
         }
         ini_set('session.cokkie_httponly', true);
