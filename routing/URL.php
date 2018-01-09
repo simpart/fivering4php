@@ -16,7 +16,7 @@ class URL {
     
     function __construct($u) {
         try {
-            $this->url = $this->setUrl($u);
+            $this->setUrl($u);
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -55,7 +55,7 @@ class URL {
                 }
             }
             
-            return $ex_url;
+            $this->url = $ex_url;
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -93,11 +93,11 @@ class URL {
     public function getUrl ($idx=null) {
         try {
             $ret_url = $this->url;
-            for ($loop=0; $loop < $this->offset ;$loop++) {
-                array_splice($ret_url, 0, 1);
-            }
-
+            
             if (null === $idx) {
+                for ($loop=0; $loop < $this->offset ;$loop++) {
+                    array_splice($ret_url, 0, 1);
+                }
                 return $ret_url;
             } else if ( (0 !== strcmp(gettype($idx), 'integer')) ||
                         (0 > $idx) ||
@@ -122,12 +122,13 @@ class URL {
         try {
             $ret = '';
             $cnt = 0;
-            $chk_off = 0;
+            $url = $this->url;
             if (null === $off) {
-                $chk_off = $this->offset;
+                $off = $this->offset;
             }
-            foreach ($this->url as $uelm) {
-                if ($cnt < $chk_off) {
+            foreach ($url as $uelm) {
+                if ($cnt < $off) {
+                    $cnt++;
                     continue;
                 }
                 $ret .= DIRECTORY_SEPARATOR . $uelm;
