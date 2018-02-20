@@ -4,11 +4,12 @@
  * @brief mongo db controller
  * @author simpart
  */
-namespace db;
+namespace ttr\db\mongo;
+
 require_once(__DIR__ . '/../ttr/class.php');
 require_once(__DIR__ . '/func/mongo.php');
 
-class Mongo implements NoSqlCtrl {
+class Ctrl {
     private $host    = null;
     private $dbname  = null;
     private $colname = null;
