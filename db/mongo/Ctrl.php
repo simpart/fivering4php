@@ -6,8 +6,8 @@
  */
 namespace ttr\db\mongo;
 
-require_once(__DIR__ . '/../ttr/class.php');
-require_once(__DIR__ . '/func/mongo.php');
+require_once(__DIR__ . '/../../class.php');
+require_once(__DIR__ . '/func.php');
 
 class Ctrl {
     private $host    = null;
@@ -20,8 +20,8 @@ class Ctrl {
             if ((null === $hst) || (null === $db)) {
                 throw new \Exception('invalid parameter');
             }
-            $mng    = db\mongo\getManager($hst);
-            $dbname = $db;
+            $this->mng    = getManager($hst);
+            $this->dbname = $db;
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -44,7 +44,7 @@ class Ctrl {
             } else {
                 $bulk->insert($key_vals);
             }
-            return $mongo->executeBulkWrite($this->dbname . '.' . $col, $bulk);
+            return $this->mng->executeBulkWrite($this->dbname . '.' . $col, $bulk);
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -67,7 +67,7 @@ class Ctrl {
             } else {
                 $bulk->delete($tgt);
             }
-            return $mongo->executeBulkWrite($this->dbname . '.' . $col, $bulk);
+            return $this->mng->executeBulkWrite($this->dbname . '.' . $col, $bulk);
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -84,7 +84,7 @@ class Ctrl {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite;
             $bulk->update($fil, $upd);
-            return $mongo->executeBulkWrite($this->dbname . '.' . $col, $bulk);
+            return $this->mng->executeBulkWrite($this->dbname . '.' . $col, $bulk);
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -99,13 +99,14 @@ class Ctrl {
     
     public function find ($col, $fil, $opt=[]) {
         try {
-            $query = new \MongoDB\Driver\Query($fil, $opt);
-            $rows  = $mongo->executeQuery( $this->dbname . '.' . $col, $query);
-            $ret   = null;
-            foreach ($rows as $doc) {
-                $ret[] = $doc;
-            }
-            return $ret;
+            $query = new \MongoDB\Driver\Query(
+                             $fil,
+                             $opt
+                         );
+            return $this->mng->executeQuery(
+                       $this->dbname . '.' . $col,
+                       $query
+                   );
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .

@@ -4,7 +4,7 @@
  * @brief util function for mongodb
  * @author simpart
  */
-namespace db;
+namespace ttr\db\mongo;
 $g_mongo = null;
 
 function getManager ($host) {
