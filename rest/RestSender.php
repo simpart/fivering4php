@@ -36,29 +36,10 @@ class RestSender
     }
     
     
-    public function sendGet ($opt)
+    public function sendGet ($opt=null)
     {
         try {
-#            $curl = null;
-#            if( count($prm) > 0 ) {
-#                $uri  .= '?';
-#                $query = '';
-#                foreach ($prm as $key => $value) {
-#                    if( strlen(trim($key)) > 0 ) {
-#                        $query .= (rawurlencode($key).'='.rawurlencode($value).'&');
-#                    }
-#                }
-#                $uri .= $query;
-#            }
-#            $curl = curl_init($this->uri);
-#            curl_setopt($curl, CURLOPT_URL           , $this->uri);
-#            curl_setopt($curl, CURLOPT_CUSTOMREQUEST , 'GET');
-#            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-#            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-#            $ret_val = curl_exec($curl);
-#            curl_close($curl);
-#
-            $curl = curl_init($this->uri);
+            $curl = \curl_init($this->uri);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST , 'GET');
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
@@ -68,14 +49,13 @@ class RestSender
 
             if (null !== $opt) {
                 foreach ($opt as $key => $val) {
-                    curl_setopt($curl, $key, $val);
+                    \curl_setopt($curl, $key, $val);
                 }
             }
 
-            $ret_val = curl_exec($curl);
+            $ret_val = \curl_exec($curl);
             if (false === $ret_val) {
-                 var_dump(curl_getinfo($curl));
-                 var_dump(curl_errno($curl));
+		 throw new \Exception(\curl_getinfo($curl));
             }
             curl_close($curl);
             
