@@ -7,8 +7,9 @@
 namespace ttr\session;
 
 class Controller {
-
-    function __construct($app) {
+    private $limit = null;
+    
+    function __construct($app, $lmt=null) {
         try {
             if (0 !== strcmp('string', gettype($app))) {
                 throw new \Exception('invalid parameter : ' . __FILE__ . '->' . __LINE__ );
@@ -18,6 +19,13 @@ class Controller {
             session_set_cookie_params(0, '/' . $app . '/');
             session_start();
             header('X-Control-Type-Options: nosniff');
+            
+            /* set limit */
+            if (null !== $lmt) {
+                ini_set('session.cookie_lifetime', $lmt);
+                ini_set('session.gc_maxlifetime' , $lmt); 
+                $this->limit = lmt;
+            }
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -30,44 +38,40 @@ class Controller {
         }
     }
 
-//    public function isStarted () {
-//        try {
-//            if ( php_sapi_name() !== 'cli' ) {
-//                if ( version_compare(phpversion(), '5.4.0', '>=') ) {
-//                    return session_status() === PHP_SESSION_ACTIVE ? TRUE : FALSE;
-//                } else {
-//                    return session_id() === '' ? FALSE : TRUE;
-//                }
-//            }
-//        } catch (\Exception $e) {
-//            throw new \Exception(
-//                PHP_EOL   .
-//                'File:'   . __FILE__         . ',' .
-//                'Line:'   . __line__         . ',' .
-//                'Class:'  . get_class($this) . ',' .
-//                'Method:' . __FUNCTION__     . ',' .
-//                $e->getMessage()
-//            );
-//        }
-//    }
     
     public function set ($key, $val) {
         try {
             session_regenerate_id(true);
+            //session.cookie_lifetime
             $_SESSION[$key] = $val;
         } catch (\Exception $e) {
-            throw $e;
+            throw new \Exception(
+                PHP_EOL   .
+                'File:'   . __FILE__         . ',' .
+                'Line:'   . __line__         . ',' .
+                'Class:'  . get_class($this) . ',' .
+                'Method:' . __FUNCTION__     . ',' .
+                $e->getMessage()
+            );
         }
     }
-
+    
     public function get ($key) {
         try {
+            /* set session value */
             if (false === array_key_exists($key, $_SESSION)) {
                 return null;
             }
             return $_SESSION[$key];
         } catch (\Exception $e) {
-            throw $e;
+            throw new \Exception(
+                PHP_EOL   .
+                'File:'   . __FILE__         . ',' .
+                'Line:'   . __line__         . ',' .
+                'Class:'  . get_class($this) . ',' .
+                'Method:' . __FUNCTION__     . ',' .
+                $e->getMessage()
+            );
         }
     }
     
@@ -77,7 +81,14 @@ class Controller {
             setcookie($nm, '', 0, '/' . $nm . '/');
             session_destroy();
         } catch (\Exception $e) {
-            throw $e;
+            throw new \Exception(
+                PHP_EOL   .
+                'File:'   . __FILE__         . ',' .
+                'Line:'   . __line__         . ',' .
+                'Class:'  . get_class($this) . ',' .
+                'Method:' . __FUNCTION__     . ',' .
+                $e->getMessage()
+            );
         }
     }
 }
