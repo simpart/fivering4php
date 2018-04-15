@@ -37,7 +37,7 @@ class Ctrl {
     public function add ($col, $key_vals) {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite;
-            if (array_values($keyvals) === $key_vals) {
+            if (array_values($key_vals) === $key_vals) {
                 foreach ($key_vals as $elm) {
                     $bulk->insert($elm);
                 }
