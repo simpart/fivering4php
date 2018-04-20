@@ -89,17 +89,18 @@ class Collection {
         }
     }
 
-    public function find ($kvs) {
+    public function find ($doc) {
         try {
-            if ( (1 === count($kvs)) &&
-                 (true === array_key_exists('_id', $kvs)) ) {
-                  $this->ctrl->find(
+            $conts = $doc->contents();
+            if ( (1 === count($conts)) &&
+                 (true === array_key_exists('_id', $conts())) ) {
+                $rows =  $this->ctrl->find(
                               array(
-                                  '_id' => new \MongoDB\BSON\ObjectId($kvs['_id'])
+                                  '_id' => new \MongoDB\BSON\ObjectId($conts['_id'])
                               )
                           );
             } else {
-                $rows = $this->ctrl->find($kvs);
+                $rows = $this->ctrl->find($conts);
             }
             
             $ret = null;
