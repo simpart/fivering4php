@@ -1,27 +1,28 @@
 <?php
 /**
- * @file Mongo.php
- * @brief mongo db controller
+ * @file Common.php
+ * @brief mongodb common controller
  * @author simpart
  */
-namespace ttr\db\mongo;
+namespace ttr\db\mongo\ctrl;
 
-require_once(__DIR__ . '/../../class.php');
-require_once(__DIR__ . '/func.php');
+require_once(__DIR__ . '/../../../class.php');
+require_once(__DIR__ . '/../func.php');
 
-class Ctrl {
-    private $host    = null;
-    private $dbname  = null;
-    private $colname = null;
-    private $mng     = null;
+class Common {
+    private $host     = null;
+    private $db_name  = null;
+    private $col_name = null;
+    private $mng      = null;
     
-    function __construct($hst=null, $db=null) {
+    function __construct($hst=null, $db=null, $cl=null) {
         try {
-            if ((null === $hst) || (null === $db)) {
+            if ((null === $hst) || (null === $db) || (null === $cl)) {
                 throw new \Exception('invalid parameter');
             }
-            $this->mng    = getManager($hst);
-            $this->dbname = $db;
+            $this->mng      = \ttr\db\mongo\getManager($hst);
+            $this->db_name  = $db;
+            $this->col_name = $cl;
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -34,7 +35,7 @@ class Ctrl {
         }
     }
     
-    public function add ($col, $key_vals) {
+    public function add ($key_vals) {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite;
             if (array_values($key_vals) === $key_vals) {
@@ -44,7 +45,10 @@ class Ctrl {
             } else {
                 $bulk->insert($key_vals);
             }
-            return $this->mng->executeBulkWrite($this->dbname . '.' . $col, $bulk);
+            return $this->mng->executeBulkWrite(
+                       $this->db_name . '.' . $this->col_name,
+                       $bulk
+                   );
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -57,17 +61,20 @@ class Ctrl {
         }
     }
     
-    public function delete ($col, $tgt) {
+    public function delete ($kvs) {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite;
-            if (array_values($tgt) === $tgt) {
-                foreach ($tgt as $elm) {
+            if (array_values($kvs) === $kvs) {
+                foreach ($kvs as $elm) {
                     $bulk->delete($elm);
                 }
             } else {
-                $bulk->delete($tgt);
+                $bulk->delete($kvs);
             }
-            return $this->mng->executeBulkWrite($this->dbname . '.' . $col, $bulk);
+            return $this->mng->executeBulkWrite(
+                       $this->db_name . '.' . $this->col_name,
+                       $bulk
+                   );
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -80,11 +87,14 @@ class Ctrl {
         }
     }
     
-    public function update ($col, $fil, $upd) {
+    public function update ($fil, $upd) {
         try {
             $bulk = new \MongoDB\Driver\BulkWrite;
             $bulk->update($fil, $upd);
-            return $this->mng->executeBulkWrite($this->dbname . '.' . $col, $bulk);
+            return $this->mng->executeBulkWrite(
+                       $this->db_name . '.' . $this->col_name,
+                       $bulk
+                   );
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -97,14 +107,14 @@ class Ctrl {
         }
     }
     
-    public function find ($col, $fil, $opt=[]) {
+    public function find ($fil, $opt=[]) {
         try {
             $query = new \MongoDB\Driver\Query(
                              $fil,
                              $opt
                          );
             return $this->mng->executeQuery(
-                       $this->dbname . '.' . $col,
+                       $this->db_name . '.' . $this->col_name,
                        $query
                    );
         } catch (\Exception $e) {
