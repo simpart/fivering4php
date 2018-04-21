@@ -29,7 +29,7 @@ class Collection {
             /* check document */
             $doc->chkRequire();
             /* check redundant */
-            if (null !== $this->find($doc->contents())) {
+            if (null !== $this->find($doc)) {
                 throw new \Exception('this document is already exists');
             }
             /* execute add */
@@ -91,16 +91,23 @@ class Collection {
 
     public function find ($doc) {
         try {
-            $conts = $doc->contents();
-            if ( (1 === count($conts)) &&
-                 (true === array_key_exists('_id', $conts())) ) {
+            $conts    = $doc->contents();
+            $find_cnt = null;
+            foreach ($conts as $c_key => $c_val) {
+                if (null !== $c_val) {
+                    $find_cnt[$c_key] = $c_val;
+                }
+            }
+            
+            if ( (1 === count($find_cnt)) &&
+                 (true === array_key_exists('_id', $find_cnt())) ) {
                 $rows =  $this->ctrl->find(
                               array(
-                                  '_id' => new \MongoDB\BSON\ObjectId($conts['_id'])
+                                  '_id' => new \MongoDB\BSON\ObjectId($find_cnt['_id'])
                               )
                           );
             } else {
-                $rows = $this->ctrl->find($conts);
+                $rows = $this->ctrl->find($find_cnt);
             }
             
             $ret = null;
