@@ -89,13 +89,15 @@ class Collection {
         }
     }
 
-    public function find ($doc) {
+    public function find ($doc=null) {
         try {
-            $conts    = $doc->contents();
             $find_cnt = null;
-            foreach ($conts as $c_key => $c_val) {
-                if (null !== $c_val) {
-                    $find_cnt[$c_key] = $c_val;
+            if (null !== $doc) {
+                $conts = $doc->contents();
+                foreach ($conts as $c_key => $c_val) {
+                    if (null !== $c_val) {
+                        $find_cnt[$c_key] = $c_val;
+                    }
                 }
             }
             
@@ -107,7 +109,7 @@ class Collection {
                               )
                           );
             } else {
-                $rows = $this->ctrl->find($find_cnt);
+                $rows = $this->ctrl->find((null == $find_cnt) ? [] : $find_cnt);
             }
             
             $ret = null;
