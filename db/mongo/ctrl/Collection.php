@@ -49,13 +49,21 @@ class Collection {
     public function delete ($doc) {
         try {
             /* check target exists */
-            $chk_find = (null === $doc->id()) ? $doc->contents() : array('_id' => $doc->id());
-            if (null === $this->find($chk_find)) {
+            if (null === $this->find($doc)) {
                 /* this doc is already deleted */
                 return;
             }
+            /* set target */
+            $del_tgt = null;
+            if (null === $doc->id()) {
+                $del_tgt = $doc->contents();
+            } else {
+                $del_tgt = array(
+                               '_id' => new \MongoDB\BSON\ObjectId($doc->id())
+                           );
+            }
             /* delete */
-            $this->ctrl->delete($doc->contents());
+            $this->ctrl->delete($del_tgt);
         } catch (\Exception $e) {
             throw new \Exception(
                 PHP_EOL   .
@@ -93,28 +101,25 @@ class Collection {
         try {
             $find_cnt = null;
             if (null !== $doc) {
-                $conts = $doc->contents();
-                foreach ($conts as $c_key => $c_val) {
-                    if (null !== $c_val) {
-                        $find_cnt[$c_key] = $c_val;
-                    }
+                if (null !== $doc->id()) {
+                    /* find by _id */
+                    $rows = $this->ctrl->find(
+                        array(
+                            '_id' => new \MongoDB\BSON\ObjectId($doc->id())
+                        )
+                    );
+                } else {
+                    /* find by contents */
+                    $rows = $this->ctrl->find($doc->contents());
                 }
-            }
-            
-            if ( (1 === count($find_cnt)) &&
-                 (true === array_key_exists('_id', $find_cnt())) ) {
-                $rows =  $this->ctrl->find(
-                              array(
-                                  '_id' => new \MongoDB\BSON\ObjectId($find_cnt['_id'])
-                              )
-                          );
             } else {
-                $rows = $this->ctrl->find((null == $find_cnt) ? [] : $find_cnt);
+                /* get all document */
+                $rows = $this->ctrl->find([]);
             }
             
             $ret = null;
-            foreach ($rows as $doc) {
-                $ret[] = $doc;
+            foreach ($rows as $d_elm) {
+                $ret[] = $d_elm;
             }
             return $ret;
         } catch (\Exception $e) {
